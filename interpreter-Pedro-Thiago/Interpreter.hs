@@ -13,6 +13,7 @@ subst x n b@(Var v) = if v == x then
 subst x n (Lam v t b) = Lam v t (subst x n b)
 subst x n (App e1 e2) = App (subst x n e1) (subst x n e2)
 subst x n (Add e1 e2) = Add (subst x n e1) (subst x n e2)
+subst x n (Or e1 e2) = Or (subst x n e1) (subst x n e2)
 -- subs sub
 subst x n (Sub e1 e2) = Sub (subst x n e1) (subst x n e2)
 -- subst mul
@@ -23,16 +24,14 @@ subst x n (Pair e1 e2) = Pair (subst x n e1) (subst x n e2)
 subst x n (First e) = First (subst x n e)
 --subst second
 subst x n (Second e) = Second (subst x n e)
---subst first
-subst x n (First e) = First (subst x n e)
---subst second
-subst x n (Second e) = Second (subst x n e)
 -- subst or
-subst x n (Or e1 e2) = Or (subst x n e1) (subst x n e2)
 subst x n (And e1 e2) = And (subst x n e1) (subst x n e2)
+-- subst not
 subst x n (Not e) = Not (subst x n e)
+-- subst let
 subst x n (Let v e1 e2) = Let v (subst x n e1) (subst x n e2)
 subst x n (Eq e1 e2) = Eq (subst x n e1) (subst x n e2)
+-- subst in
 subst x n (In e1 e2) = In (subst x n e1) (subst x n e2)
 subst x n (If e e1 e2) = If (subst x n e) (subst x n e1) (subst x n e2)
 subst x n (Paren e) = Paren (subst x n e)
@@ -112,7 +111,6 @@ step (First e) = case step e of
 step (Second e) = case step e of
                       Just (Pair _ e2) -> Just e2
                       _ -> Nothing
- 
 -- step in
 step (In e1 e2) = case step e1 of 
                     Just e1' -> Just (In e1' e2)
@@ -155,13 +153,6 @@ step (Eq e1 e2) | isvalue e1 && isvalue e2 = if (e1 == e2) then
                                 Just e1' -> Just (Eq e1' e2)
                                 _        -> Nothing 
 step e = Just e 
---step Pair
-step (Pair e1 e2) = case (step e1, step e2) of
-                        (Just e1', Just e2') -> Just (Pair e1' e2')
-                        _                    -> Nothing
-step (First (Pair e1 e2)) = Just e1
-step (Second (Pair e1 e2)) = Just e2
-step e = Just e
 
 eval :: Expr -> Expr 
 eval e | isvalue e = e 

@@ -134,3 +134,17 @@ Nesta função, primeiro verificamos o tipo de ambas as expressões e1 e e2, e, 
 
 
 
+
+
+
+
+A função typeof é usada para verificar o tipo de uma expressão em Haskell. O primeiro argumento, ctx, é um contexto que pode ser usado para 
+ajudar a determinar o tipo de uma expressão. O segundo argumento, (Pair e1 e2), é a expressão a ser verificada.
+O corpo da função começa com a expressão do. Este é um construtor de monadas que permite que você execute uma sequência de ações e capture o resultado.
+Em seguida, usamos a função typeof recursivamente para verificar o tipo de e1 e e2. O resultado é capturado em ty1 e ty2.
+Por fim, usamos a função Just para retornar o tipo TPair que consiste de ty1 e ty2. Este é o tipo de uma expressão de par. 
+Em resumo, a função typeof ctx (Pair e1 e2) verifica recursivamente o tipo de e1 e e2, e retorna o tipo TPair formado por ambos os tipos.
+
+
+explicação pro step let
+
